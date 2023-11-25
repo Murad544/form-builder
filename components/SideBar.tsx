@@ -65,7 +65,7 @@ const SideBar = () => {
     e.dataTransfer.setData('text/plain', field.name);
   };
   return (
-    <div className='mt-4 col-span-1'>
+    <div className='grid grid-cols-2 gap-1'>
       {formElements.map((field, index) => (
         <div
           key={index}
