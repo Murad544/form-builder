@@ -17,10 +17,13 @@ const FormBody = () => {
   const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const field = e.dataTransfer.getData('text/plain');
+    const accessor = e.dataTransfer.getData('accessor');
     const newField: Field = {
       name: field,
+      accessor,
       // Add default values for other properties as needed
     };
+    console.log(newField);
     dispatch(addFormField(newField));
   };
 
@@ -33,55 +36,48 @@ const FormBody = () => {
   };
 
   const renderField = (field: Field) => {
-    switch (field.name) {
-      case 'Text Input':
-        return <input type='text' />;
-      case 'Textarea':
-        return <textarea />;
-      case 'Number Input':
-        return <input type='number' />;
-      case 'Date Input':
-        return <input type='date' />;
-      case 'Time Input':
-        return <input type='time' />;
-      case 'Select':
+    switch (field.accessor) {
+      case 'textInput':
+        return <input className='border border-gray-300' type='text' />;
+      case 'textarea':
+        return <textarea className='border border-gray-300' />;
+      case 'numberInput':
+        return <input className='border border-gray-300' type='number' />;
+      case 'dateInput':
+        return <input className='border border-gray-300' type='date' />;
+      case 'timeInput':
+        return <input className='border border-gray-300' type='time' />;
+      case 'select':
         return (
-          <select>
-            <option value='1'>Option 1</option>
-            <option value='2'>Option 2</option>
-            <option value='3'>Option 3</option>
+          <select className='border border-gray-300'>
+            <option value=''>Select an option</option>
+            <option value='option1'>Option 1</option>
+            <option value='option2'>Option 2</option>
+            <option value='option3'>Option 3</option>
           </select>
         );
-      case 'Check-box':
+      case 'checkbox':
         return (
-          <div>
-            <input type='checkbox' id='1' />
-            <label htmlFor='1'>Option 1</label>
-            <input type='checkbox' id='2' />
-            <label htmlFor='2'>Option 2</label>
-            <input type='checkbox' id='3' />
-            <label htmlFor='3'>Option 3</label>
+          <div className='flex items-center'>
+            <input className='border border-gray-300' type='checkbox' />
+            <label className='ml-2'>Checkbox</label>
           </div>
         );
-      case 'Radio-Buttons':
+      case 'radioButtons':
         return (
-          <div>
-            <input type='radio' id='1' />
-            <label htmlFor='1'>Option 1</label>
-            <input type='radio' id='2' />
-            <label htmlFor='2'>Option 2</label>
-            <input type='radio' id='3' />
-            <label htmlFor='3'>Option 3</label>
+          <div className='flex items-center'>
+            <input className='border border-gray-300' type='radio' />
+            <label className='ml-2'>Radio Button</label>
           </div>
         );
-      case 'File':
-        return <input type='file' />;
-      case 'Link':
-        return <input type='url' />;
-      case 'Email':
-        return <input type='email' />;
-      case 'Phone':
-        return <input type='tel' />;
+      case 'file':
+        return <input className='border border-gray-300' type='file' />;
+      case 'link':
+        return <input className='border border-gray-300' type='url' />;
+      case 'email':
+        return <input className='border border-gray-300' type='email' />;
+      case 'phone':
+        return <input className='border border-gray-300' type='tel' />;
       default:
         return null;
     }

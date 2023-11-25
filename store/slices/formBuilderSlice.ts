@@ -32,6 +32,7 @@ const formBuilderSlice = createSlice({
   reducers: {
     addFormField: (state, action: PayloadAction<Field>) => {
       state.formFields = [...state.formFields, action.payload];
+      state.selectedField = action.payload;
     },
     selectField: (state, action: PayloadAction<Field | null>) => {
       state.selectedField = action.payload;

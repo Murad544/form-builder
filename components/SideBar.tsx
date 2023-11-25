@@ -25,7 +25,7 @@ const formElements = [
   },
   {
     name: 'Time Input',
-    accessor: 'numberInput',
+    accessor: 'timeInput',
   },
   {
     name: 'Select',
@@ -63,6 +63,7 @@ const SideBar = () => {
     field: Field,
   ) => {
     e.dataTransfer.setData('text/plain', field.name);
+    e.dataTransfer.setData('accessor', field.accessor);
   };
   return (
     <div className='grid grid-cols-2 gap-1'>
