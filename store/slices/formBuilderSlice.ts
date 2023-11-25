@@ -1,8 +1,14 @@
 // slices/formBuilderSlice.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
-interface InputProps {
+interface FormBuilderState {
+  formFields: Field[];
+  selectedField: Field | null;
+}
+
+export interface Field {
   name: string;
+  accessor: string;
   label?: string;
   placeholder?: string;
   width?: string;
@@ -15,11 +21,6 @@ interface InputProps {
   choices?: string[];
 }
 
-interface FormBuilderState {
-  formFields: InputProps[];
-  selectedField: InputProps | null;
-}
-
 const initialState: FormBuilderState = {
   formFields: [],
   selectedField: null,
@@ -29,15 +30,22 @@ const formBuilderSlice = createSlice({
   name: 'formBuilder',
   initialState,
   reducers: {
-    addFormField: (state, action: PayloadAction<InputProps>) => {
+    addFormField: (state, action: PayloadAction<Field>) => {
       state.formFields = [...state.formFields, action.payload];
     },
-    selectField: (state, action: PayloadAction<InputProps | null>) => {
+    selectField: (state, action: PayloadAction<Field | null>) => {
       state.selectedField = action.payload;
+    },
+    deleteFormField: (state, action: PayloadAction<number>) => {
+      state.formFields = state.formFields.filter(
+        (field, index) => index !== action.payload,
+      );
+      state.selectedField = null; // Clear the selected field after deleting
     },
   },
 });
 
-export const { addFormField, selectField } = formBuilderSlice.actions;
+export const { addFormField, selectField, deleteFormField } =
+  formBuilderSlice.actions;
 
 export default formBuilderSlice.reducer;
