@@ -8,19 +8,24 @@ import {
   selectField,
 } from '@/store/slices/formBuilderSlice';
 import { RootState } from '@/store/store';
+import { v4 as uuidv4 } from 'uuid';
+import { DragEvent } from 'react';
 
 const FormBody = () => {
   const dispatch = useDispatch();
-  const formFields = useSelector(
-    (state: RootState) => state.formBuilder.formFields,
+  const { formFields, selectedField } = useSelector(
+    (state: RootState) => state.formBuilder,
   );
-  const handleDrop = (e: React.DragEvent<HTMLDivElement>) => {
+  const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const field = e.dataTransfer.getData('text/plain');
+    const name = e.dataTransfer.getData('text/plain');
     const accessor = e.dataTransfer.getData('accessor');
     const newField: Field = {
-      name: field,
+      id: uuidv4(),
+      name,
       accessor,
+      visibility: 'visible',
+      width: 'col-span-12',
       // Add default values for other properties as needed
     };
     console.log(newField);
@@ -38,19 +43,44 @@ const FormBody = () => {
   const renderField = (field: Field) => {
     switch (field.accessor) {
       case 'textInput':
-        return <input className='border border-gray-300' type='text' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='text'
+            {...field}
+          />
+        );
       case 'textarea':
-        return <textarea className='border border-gray-300' />;
+        return (
+          <textarea className='border border-gray-300 w-full' {...field} />
+        );
       case 'numberInput':
-        return <input className='border border-gray-300' type='number' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='number'
+            {...field}
+          />
+        );
       case 'dateInput':
-        return <input className='border border-gray-300' type='date' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='date'
+            {...field}
+          />
+        );
       case 'timeInput':
-        return <input className='border border-gray-300' type='time' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='time'
+            {...field}
+          />
+        );
       case 'select':
         return (
-          <select className='border border-gray-300'>
-            <option value=''>Select an option</option>
+          <select className='border border-gray-300 w-full'>
             <option value='option1'>Option 1</option>
             <option value='option2'>Option 2</option>
             <option value='option3'>Option 3</option>
@@ -58,26 +88,48 @@ const FormBody = () => {
         );
       case 'checkbox':
         return (
-          <div className='flex items-center'>
-            <input className='border border-gray-300' type='checkbox' />
-            <label className='ml-2'>Checkbox</label>
-          </div>
+          <input
+            className='border border-gray-300'
+            type='checkbox'
+            {...field}
+          />
         );
       case 'radioButtons':
         return (
-          <div className='flex items-center'>
-            <input className='border border-gray-300' type='radio' />
-            <label className='ml-2'>Radio Button</label>
-          </div>
+          <input className='border border-gray-300' type='radio' {...field} />
         );
       case 'file':
-        return <input className='border border-gray-300' type='file' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='file'
+            {...field}
+          />
+        );
       case 'link':
-        return <input className='border border-gray-300' type='url' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='url'
+            {...field}
+          />
+        );
       case 'email':
-        return <input className='border border-gray-300' type='email' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='email'
+            {...field}
+          />
+        );
       case 'phone':
-        return <input className='border border-gray-300' type='tel' />;
+        return (
+          <input
+            className='border border-gray-300 w-full'
+            type='tel'
+            {...field}
+          />
+        );
       default:
         return null;
     }
@@ -88,23 +140,34 @@ const FormBody = () => {
       onDragOver={(e) => e.preventDefault()}
       className='border border-dashed border-gray-300 p-4 min-h-[200px] col-span-2 max-h-[100vh] overflow-y-auto'
     >
-      {formFields.map((field, index) => (
-        <div key={index} className='relative'>
-          <div
-            onClick={() => handleFieldClick(field)}
-            className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'
-          >
-            {field.name}
-            {renderField(field)}
-          </div>
-          <button
-            onClick={() => handleDeleteField(index)}
-            className='absolute top-0 right-0 p-2 bg-red-500 text-white rounded-full hover:bg-red-600'
-          >
-            X
-          </button>
-        </div>
-      ))}
+      <form className='grid grid-cols-12 gap-4'>
+        {formFields.map(
+          (field, index) =>
+            field.visibility === 'visible' && (
+              <div
+                key={field.id}
+                className={`relative ${field.width} ${
+                  field.id === selectedField?.id && 'border border-gray-700'
+                }`}
+              >
+                <div
+                  onClick={() => handleFieldClick(field)}
+                  className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'
+                >
+                  <label>{field.label}</label>
+                  {renderField(field)}
+                  <div>{field.helperText}</div>
+                </div>
+                <button
+                  onClick={() => handleDeleteField(index)}
+                  className='absolute top-0 right-0 bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6'
+                >
+                  x
+                </button>
+              </div>
+            ),
+        )}
+      </form>
     </div>
   );
 };

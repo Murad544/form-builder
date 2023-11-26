@@ -2,6 +2,11 @@
 
 import { Field } from '@/store/slices/formBuilderSlice';
 
+interface FormElement {
+  name: string;
+  accessor: string;
+}
+
 const formElements = [
   {
     name: 'Label',
@@ -21,7 +26,7 @@ const formElements = [
   },
   {
     name: 'Date Input',
-    accessor: 'numberInput',
+    accessor: 'dateInput',
   },
   {
     name: 'Time Input',
@@ -60,7 +65,7 @@ const formElements = [
 const SideBar = () => {
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
-    field: Field,
+    field: FormElement,
   ) => {
     e.dataTransfer.setData('text/plain', field.name);
     e.dataTransfer.setData('accessor', field.accessor);

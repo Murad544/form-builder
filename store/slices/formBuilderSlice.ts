@@ -7,17 +7,17 @@ interface FormBuilderState {
 }
 
 export interface Field {
+  id: string;
   name: string;
   accessor: string;
   label?: string;
   placeholder?: string;
   width?: string;
-  visibility?: string;
+  visibility?: 'visible' | 'hidden';
   minLength?: number;
   maxLength?: number;
   helperText?: string;
   required?: boolean;
-  options?: string[];
   choices?: string[];
 }
 
@@ -43,10 +43,16 @@ const formBuilderSlice = createSlice({
       );
       state.selectedField = null; // Clear the selected field after deleting
     },
+    editFormField: (state, action: PayloadAction<Field>) => {
+      state.formFields = state.formFields.map((field) =>
+        field.id === action.payload.id ? action.payload : field,
+      );
+      state.selectedField = action.payload;
+    },
   },
 });
 
-export const { addFormField, selectField, deleteFormField } =
+export const { addFormField, selectField, deleteFormField, editFormField } =
   formBuilderSlice.actions;
 
 export default formBuilderSlice.reducer;
