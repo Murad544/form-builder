@@ -50,10 +50,11 @@ const RigthSideBar = () => {
     selectedField?.accessor === 'radioButtons' ||
     selectedField?.accessor === 'select';
   return (
-    <div className='ml-4 col-span-1'>
-      <div className='grid gap-3'>
-        <h3 className='text-xl font-semibold mb-2'>Options</h3>
-
+    <div className='col-span-1 overflow-y-auto relative overflow-y-auto'>
+      <h2 className='text-xl font-semibold mb-2 fixed w-full bg-white border-b-2 z-30'>
+        Options
+      </h2>
+      <div className='grid gap-3 pt-10'>
         <div>
           <label htmlFor=''>Label</label>
           <input

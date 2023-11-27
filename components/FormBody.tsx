@@ -140,9 +140,12 @@ const FormBody = () => {
     <div
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-      className='border border-dashed border-gray-300 p-4 min-h-[200px] col-span-2 max-h-[100vh] overflow-y-auto'
+      className='border border-dashed border-gray-300  min-h-[200px] col-span-2 max-h-[100vh] overflow-y-auto relative'
     >
-      <form className='grid grid-cols-12 gap-4'>
+      <h2 className='text-xl font-semibold mb-2 fixed bg-white border-b-2 w-full z-20 pl-4'>
+        Form
+      </h2>
+      <form className='grid grid-cols-12 gap-4 p-4 pt-10'>
         {formFields.map(
           (field, index) =>
             field.visibility === 'visible' && (
@@ -162,7 +165,7 @@ const FormBody = () => {
                 </div>
                 <button
                   onClick={() => handleDeleteField(index)}
-                  className='absolute top-0 right-0 bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6'
+                  className='absolute top-0 right-0 bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6 z-1'
                 >
                   x
                 </button>
