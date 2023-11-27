@@ -4,6 +4,7 @@ import { Field, editFormField } from '@/store/slices/formBuilderSlice';
 import { RootState } from '@/store/store';
 import React, { ChangeEvent } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import Choices from './Choices';
 
 const widtOptions = [
   'col-span-1',
@@ -20,125 +21,139 @@ const widtOptions = [
   'col-span-12',
 ];
 
+type Keys = keyof Field;
+
 const RigthSideBar = () => {
   const dispatch = useDispatch();
   const selectedField = useSelector(
     (state: RootState) => state.formBuilder.selectedField,
   );
 
-  type Keys =
-    | 'label'
-    | 'placeholder'
-    | 'width'
-    | 'visibility'
-    | 'minLength'
-    | 'maxLength'
-    | 'helperText'
-    | 'required'
-    | 'choices';
-
   const hanleOptionChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const value = e.target.value;
+    console.log(value);
     const key: Keys = e.target.name as Keys;
-    console.log(key, value);
-    dispatch(editFormField({ ...selectedField, [key]: value }));
+    selectedField &&
+      dispatch(editFormField({ ...selectedField, [key]: value }));
   };
+
+  const hanleRequiredChange = (e: ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.checked;
+    const key: Keys = e.target.name as Keys;
+    selectedField &&
+      dispatch(editFormField({ ...selectedField, [key]: value }));
+  };
+
+  const showChoices =
+    selectedField?.accessor === 'radioButtons' ||
+    selectedField?.accessor === 'select';
   return (
     <div className='ml-4 col-span-1'>
-      {selectedField && (
+      <div className='grid gap-3'>
+        <h3 className='text-xl font-semibold mb-2'>Options</h3>
+
         <div>
-          <h3 className='text-xl font-semibold mb-2'>Options</h3>
+          <label htmlFor=''>Label</label>
+          <input
+            type='text'
+            name='label'
+            className='border border-gray-300 w-full mt-2'
+            onChange={hanleOptionChange}
+            value={selectedField?.label ?? ''}
+          />
+        </div>
 
-          <div>
-            <label htmlFor=''>Label</label>
-            <input
-              type='text'
-              name='label'
-              className='border border-gray-300'
-              onChange={hanleOptionChange}
-              value={selectedField.label ?? ''}
-            />
-          </div>
+        <div>
+          <label htmlFor=''>Placeholder</label>
+          <input
+            type='text'
+            name='placeholder'
+            className='border border-gray-300 w-full mt-2'
+            onChange={hanleOptionChange}
+            value={selectedField?.placeholder ?? ''}
+          />
+        </div>
 
-          <div>
-            <label htmlFor=''>Placeholder</label>
-            <input
-              type='text'
-              name='placeholder'
-              className='border border-gray-300'
-              onChange={hanleOptionChange}
-              value={selectedField.placeholder ?? ''}
-            />
-          </div>
+        <div>
+          <label htmlFor=''>Width</label>
+          <select
+            className='border border-gray-300 w-full mt-2'
+            name='width'
+            onChange={hanleOptionChange}
+            value={selectedField?.width}
+            defaultValue={'col-span-12'}
+          >
+            {widtOptions.map((option, index) => (
+              <option key={index} value={option}>
+                {option}
+              </option>
+            ))}
+          </select>
+        </div>
 
-          <div>
-            <label htmlFor=''>Width</label>
-            <select
-              className='border border-gray-300'
-              name='width'
-              onChange={hanleOptionChange}
-              value={selectedField.width}
-            >
-              {widtOptions.map((option, index) => (
-                <option key={index} value={option}>
-                  {option}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label htmlFor=''>Visibility</label>
-            <select
-              className='border border-gray-300'
-              name='visibility'
-              onChange={hanleOptionChange}
-              value={selectedField.visibility}
-            >
-              <option value={'visible'}>visible</option>
-              <option value={'hidden'}>hidden</option>
-            </select>
-          </div>
-
+        <div>
+          <label htmlFor=''>Visibility</label>
+          <select
+            className='border border-gray-300 w-full mt-2'
+            name='visibility'
+            onChange={hanleOptionChange}
+            value={selectedField?.visibility}
+          >
+            <option value={'visible'}>visible</option>
+            <option value={'hidden'}>hidden</option>
+          </select>
+        </div>
+        {selectedField?.accessor.includes('Input') && (
           <div className='grid grid-cols-2 gap-1'>
             <div className='col-span-1'>
               <label htmlFor=''>Min length</label>
               <input
-                type='text'
+                type='number'
                 name='minLength'
-                className='border border-gray-300 w-full'
+                className='border border-gray-300 w-full mt-2 w-full mt-2'
                 onChange={hanleOptionChange}
-                value={selectedField.minLength ?? ''}
+                value={selectedField?.minLength ?? ''}
               />
             </div>
             <div className='col-span-1'>
               <label htmlFor=''>Min length</label>
               <input
-                type='text'
+                type='number'
                 name='maxLength'
-                className='border border-gray-300 w-full'
+                className='border border-gray-300 w-full mt-2 w-full mt-2'
                 onChange={hanleOptionChange}
-                value={selectedField.maxLength ?? ''}
+                value={selectedField?.maxLength ?? ''}
               />
             </div>
           </div>
+        )}
 
-          <div>
-            <label htmlFor=''>Helper text</label>
-            <input
-              type='text'
-              name='helperText'
-              className='border border-gray-300'
-              onChange={hanleOptionChange}
-              value={selectedField.helperText ?? ''}
-            />
-          </div>
-
-          {selectedField.accessor === ''}
+        <div>
+          <label htmlFor=''>Helper text</label>
+          <input
+            type='text'
+            name='helperText'
+            className='border border-gray-300 w-full mt-2'
+            onChange={hanleOptionChange}
+            value={selectedField?.helperText ?? ''}
+          />
         </div>
-      )}
+
+        <div>
+          <label htmlFor=''>Required</label>
+          <input
+            type='checkbox'
+            name='required'
+            className='border border-gray-300 ml-2'
+            onChange={hanleRequiredChange}
+            checked={selectedField?.required ?? false}
+          />
+        </div>
+
+        {showChoices && <Choices />}
+      </div>
     </div>
   );
 };

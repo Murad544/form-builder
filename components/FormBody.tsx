@@ -81,9 +81,11 @@ const FormBody = () => {
       case 'select':
         return (
           <select className='border border-gray-300 w-full'>
-            <option value='option1'>Option 1</option>
-            <option value='option2'>Option 2</option>
-            <option value='option3'>Option 3</option>
+            {field.choices?.map((choice, index) => (
+              <option key={index} value={choice}>
+                {choice}
+              </option>
+            ))}
           </select>
         );
       case 'checkbox':
