@@ -18,17 +18,16 @@ const FormBody = () => {
   );
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const name = e.dataTransfer.getData('text/plain');
+    const name = e.dataTransfer.getData('name');
     const accessor = e.dataTransfer.getData('accessor');
     const newField: Field = {
       id: uuidv4(),
       name,
+      label: name,
       accessor,
       visibility: 'visible',
       width: 'col-span-12',
-      // Add default values for other properties as needed
     };
-    console.log(newField);
     dispatch(addFormField(newField));
   };
 
@@ -98,7 +97,18 @@ const FormBody = () => {
         );
       case 'radioButtons':
         return (
-          <input className='border border-gray-300' type='radio' {...field} />
+          <div className='grid'>
+            {field.choices?.map((choice, index) => (
+              <div key={index}>
+                <label htmlFor=''>{choice}</label>
+                <input
+                  className='border border-gray-300 ml-2'
+                  type='radio'
+                  {...field}
+                />
+              </div>
+            ))}
+          </div>
         );
       case 'file':
         return (

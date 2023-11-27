@@ -65,7 +65,7 @@ const SideBar = () => {
     e: React.DragEvent<HTMLDivElement>,
     field: FormElement,
   ) => {
-    e.dataTransfer.setData('text/plain', field.name);
+    e.dataTransfer.setData('name', field.name);
     e.dataTransfer.setData('accessor', field.accessor);
   };
   return (
