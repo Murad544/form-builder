@@ -7,57 +7,57 @@ interface FormElement {
 
 const formElements = [
   {
-    name: 'Label',
-    accessor: 'label',
-  },
-  {
-    name: 'Text Input',
-    accessor: 'textInput',
-  },
-  {
-    name: 'Textarea',
-    accessor: 'textarea',
-  },
-  {
-    name: 'Number Input',
-    accessor: 'numberInput',
-  },
-  {
-    name: 'Date Input',
-    accessor: 'dateInput',
-  },
-  {
-    name: 'Time Input',
-    accessor: 'timeInput',
+    name: 'Input',
+    accessor: 'input',
   },
   {
     name: 'Select',
     accessor: 'select',
   },
   {
-    name: 'Check-box',
+    name: 'Radio group',
+    accessor: 'radioGroup',
+  },
+  {
+    name: 'Checkbox',
     accessor: 'checkbox',
   },
-  {
-    name: 'Radio-Buttons',
-    accessor: 'radioButtons',
-  },
-  {
-    name: 'File',
-    accessor: 'file',
-  },
-  {
-    name: 'Link',
-    accessor: 'link',
-  },
-  {
-    name: 'Email',
-    accessor: 'email',
-  },
-  {
-    name: 'Phone',
-    accessor: 'phone',
-  },
+  // {
+  //   name: 'Date Input',
+  //   accessor: 'dateInput',
+  // },
+  // {
+  //   name: 'Time Input',
+  //   accessor: 'timeInput',
+  // },
+  // {
+  //   name: 'Select',
+  //   accessor: 'select',
+  // },
+  // {
+  //   name: 'Check-box',
+  //   accessor: 'checkbox',
+  // },
+  // {
+  //   name: 'Radio-Buttons',
+  //   accessor: 'radioButtons',
+  // },
+  // {
+  //   name: 'File',
+  //   accessor: 'file',
+  // },
+  // {
+  //   name: 'Link',
+  //   accessor: 'link',
+  // },
+  // {
+  //   name: 'Email',
+  //   accessor: 'email',
+  // },
+  // {
+  //   name: 'Phone',
+  //   accessor: 'phone',
+  // },
 ];
 
 const SideBar = () => {

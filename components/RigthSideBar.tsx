@@ -1,9 +1,7 @@
 'use client';
 
-import { Field, editFormField } from '@/store/slices/formBuilderSlice';
-import { RootState } from '@/store/store';
+import { Field } from '@/store/slices/formBuilderSlice';
 import React, { ChangeEvent } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
 import Choices from './Choices';
 
 const widtOptions = [
@@ -23,32 +21,26 @@ const widtOptions = [
 
 type Keys = keyof Field;
 
-const RigthSideBar = () => {
-  const dispatch = useDispatch();
-  const selectedField = useSelector(
-    (state: RootState) => state.formBuilder.selectedField,
-  );
+const RigthSideBar = ({ selectedElement, handlePropsChange }: any) => {
+  const settings = selectedElement?.props;
 
   const hanleOptionChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const value = e.target.value;
-    console.log(value);
     const key: Keys = e.target.name as Keys;
-    selectedField &&
-      dispatch(editFormField({ ...selectedField, [key]: value }));
+    selectedElement?.id && handlePropsChange(selectedElement?.id, key, value);
   };
 
   const hanleRequiredChange = (e: ChangeEvent<HTMLInputElement>) => {
     const value = e.target.checked;
     const key: Keys = e.target.name as Keys;
-    selectedField &&
-      dispatch(editFormField({ ...selectedField, [key]: value }));
+    selectedElement?.id && handlePropsChange(selectedElement?.id, key, value);
   };
 
   const showChoices =
-    selectedField?.accessor === 'radioButtons' ||
-    selectedField?.accessor === 'select';
+    selectedElement?.accessor === 'radioGroup' ||
+    selectedElement?.accessor === 'select';
   return (
     <div className='col-span-1 overflow-y-auto relative overflow-y-auto'>
       <h2 className='text-xl font-semibold mb-2 fixed w-full bg-white border-b-2 z-30'>
@@ -62,7 +54,7 @@ const RigthSideBar = () => {
             name='label'
             className='border border-gray-300 w-full mt-2'
             onChange={hanleOptionChange}
-            value={selectedField?.label ?? ''}
+            // value={settings?.label}
           />
         </div>
 
@@ -73,7 +65,7 @@ const RigthSideBar = () => {
             name='placeholder'
             className='border border-gray-300 w-full mt-2'
             onChange={hanleOptionChange}
-            value={selectedField?.placeholder ?? ''}
+            value={settings?.placeholder ?? ''}
           />
         </div>
 
@@ -83,7 +75,7 @@ const RigthSideBar = () => {
             className='border border-gray-300 w-full mt-2'
             name='width'
             onChange={hanleOptionChange}
-            value={selectedField?.width}
+            value={settings?.width}
             defaultValue={'col-span-12'}
           >
             {widtOptions.map((option, index) => (
@@ -100,13 +92,13 @@ const RigthSideBar = () => {
             className='border border-gray-300 w-full mt-2'
             name='visibility'
             onChange={hanleOptionChange}
-            value={selectedField?.visibility}
+            value={settings?.visibility}
           >
             <option value={'visible'}>visible</option>
             <option value={'hidden'}>hidden</option>
           </select>
         </div>
-        {selectedField?.accessor.includes('Input') && (
+        {selectedElement?.accessor.includes('Input') && (
           <div className='grid grid-cols-2 gap-1'>
             <div className='col-span-1'>
               <label htmlFor=''>Min length</label>
@@ -115,7 +107,7 @@ const RigthSideBar = () => {
                 name='minLength'
                 className='border border-gray-300 w-full mt-2 w-full mt-2'
                 onChange={hanleOptionChange}
-                value={selectedField?.minLength ?? ''}
+                value={settings?.minLength ?? ''}
               />
             </div>
             <div className='col-span-1'>
@@ -125,7 +117,7 @@ const RigthSideBar = () => {
                 name='maxLength'
                 className='border border-gray-300 w-full mt-2 w-full mt-2'
                 onChange={hanleOptionChange}
-                value={selectedField?.maxLength ?? ''}
+                value={settings?.maxLength ?? ''}
               />
             </div>
           </div>
@@ -138,7 +130,7 @@ const RigthSideBar = () => {
             name='helperText'
             className='border border-gray-300 w-full mt-2'
             onChange={hanleOptionChange}
-            value={selectedField?.helperText ?? ''}
+            value={settings?.helperText ?? ''}
           />
         </div>
 
@@ -149,7 +141,7 @@ const RigthSideBar = () => {
             name='required'
             className='border border-gray-300 ml-2'
             onChange={hanleRequiredChange}
-            checked={selectedField?.required ?? false}
+            checked={settings?.required ?? false}
           />
         </div>
 
