@@ -1,28 +1,35 @@
 'use client';
 
 import { DragEvent, useRef } from 'react';
-import useFormBuilder from '@/hooks/useFormBuilder';
 import InputExtension from './Extensions/InputExtension';
 import { Extension } from '@/types';
 import SelectExtension from './Extensions/SelectExtension';
 import RadioGroup from './Extensions/RadioGroup';
+
+interface Props {
+  elements: Extension[];
+  addElement: (extension: string, initialProps: any) => void;
+  removeElement: (id: number) => void;
+  reorderElements: (dragItem: number, dragOverItem: number) => void;
+  setSelectedElementId: (id: number) => void;
+}
 
 const FormBody = ({
   elements,
   addElement,
   removeElement,
   reorderElements,
-}: any) => {
+  setSelectedElementId,
+}: Props) => {
   const dragItem = useRef(0);
   const dragOverItem = useRef(0);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const name = e.dataTransfer.getData('name');
     const isInForm = e.dataTransfer.getData('isInForm');
-    const accessor = e.dataTransfer.getData('accessor');
+    const extension = e.dataTransfer.getData('extension');
     if (isInForm !== 'true') {
-      addElement(accessor, {});
+      addElement(extension, {});
     }
   };
 
@@ -42,7 +49,7 @@ const FormBody = ({
   };
 
   const renderField = (ext: Extension) => {
-    switch (ext.accessor) {
+    switch (ext.extension) {
       case 'input':
         return <InputExtension {...ext.settings} />;
       case 'select':
@@ -68,17 +75,19 @@ const FormBody = ({
             key={field.id}
             className={`relative col-span-12`}
             draggable
-            onDragStart={(e) => handleDragStart(e, index)}
+            onClick={() => setSelectedElementId(field.id)}
+            onDragStart={(e) => {
+              handleDragStart(e, index);
+              setSelectedElementId(field.id);
+            }}
             onDragEnter={(e) => handleDragEnter(e, index)}
             onDrop={() =>
               reorderElements(dragItem.current, dragOverItem.current)
             }
           >
             <div className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'>
-              <label>{field.props.label}</label>
-              {/* {field.name} */}
               {renderField(field)}
-              <div>{field.helperText}</div>
+              <div>{field?.settings?.helperText}</div>
             </div>
             <button
               onClick={() => removeElement(field.id)}

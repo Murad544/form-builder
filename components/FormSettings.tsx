@@ -21,8 +21,8 @@ const widtOptions = [
 
 type Keys = keyof Field;
 
-const RigthSideBar = ({ selectedElement, handlePropsChange }: any) => {
-  const settings = selectedElement?.props;
+const FormSettings = ({ selectedElement, handlePropsChange }: any) => {
+  const settings = selectedElement?.settings;
 
   const hanleOptionChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
@@ -39,8 +39,8 @@ const RigthSideBar = ({ selectedElement, handlePropsChange }: any) => {
   };
 
   const showChoices =
-    selectedElement?.accessor === 'radioGroup' ||
-    selectedElement?.accessor === 'select';
+    selectedElement?.extension === 'radioGroup' ||
+    selectedElement?.extension === 'select';
   return (
     <div className='col-span-1 overflow-y-auto relative overflow-y-auto'>
       <h2 className='text-xl font-semibold mb-2 fixed w-full bg-white border-b-2 z-30'>
@@ -54,7 +54,7 @@ const RigthSideBar = ({ selectedElement, handlePropsChange }: any) => {
             name='label'
             className='border border-gray-300 w-full mt-2'
             onChange={hanleOptionChange}
-            // value={settings?.label}
+            value={settings?.label ?? ''}
           />
         </div>
 
@@ -98,7 +98,7 @@ const RigthSideBar = ({ selectedElement, handlePropsChange }: any) => {
             <option value={'hidden'}>hidden</option>
           </select>
         </div>
-        {selectedElement?.accessor.includes('Input') && (
+        {selectedElement?.extension.includes('Input') && (
           <div className='grid grid-cols-2 gap-1'>
             <div className='col-span-1'>
               <label htmlFor=''>Min length</label>
@@ -151,4 +151,4 @@ const RigthSideBar = ({ selectedElement, handlePropsChange }: any) => {
   );
 };
 
-export default RigthSideBar;
+export default FormSettings;

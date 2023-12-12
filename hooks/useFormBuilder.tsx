@@ -5,26 +5,29 @@ interface ElementData {
   id: number;
   name?: string;
   type?: string;
-  accessor?: string;
-  props: ExtensionProps;
+  extension?: string;
+  settings: ExtensionProps;
 }
 
 const useFormBuilder = () => {
   const [elements, setElements] = useState<ElementData[]>([]);
-  const [selectedElement, setSelectedElement] = useState<ElementData | null>(
+  const [selectedElementId, setSelectedElementId] = useState<number | null>(
     null,
+  );
+  const selectedElement = elements.find(
+    (element) => element.id === selectedElementId,
   );
 
   // Function to add a new element
   const addElement = useCallback(
-    (accessor: string, initialProps: ExtensionProps) => {
+    (extension: string, initialProps: ExtensionProps) => {
       const newElement: ElementData = {
         id: Date.now(), // Simple unique id generator
-        accessor,
-        name: accessor,
-        props: initialProps,
+        extension,
+        name: extension,
+        settings: initialProps,
       };
-      setSelectedElement(newElement);
+      setSelectedElementId(newElement.id);
       setElements((prevElements) => [...prevElements, newElement]);
     },
     [],
@@ -43,7 +46,10 @@ const useFormBuilder = () => {
       setElements((prevElements) =>
         prevElements.map((element) => {
           if (element.id === id) {
-            return { ...element, props: { ...element.props, ...newProps } };
+            return {
+              ...element,
+              settings: { ...element.settings, ...newProps },
+            };
           }
           return element;
         }),
@@ -66,14 +72,19 @@ const useFormBuilder = () => {
 
   const handlePropsChange = useCallback(
     (id: number, key: string, value: any) => {
-      const elementProps = elements.find((element) => element.id === id)?.props;
+      const elementProps = elements.find(
+        (element) => element.id === id,
+      )?.settings;
       if (elementProps) {
         elementProps[key] = value;
       }
       setElements((prevElements) =>
         prevElements.map((element) => {
           if (element.id === id) {
-            return { ...element, props: { ...element.props, ...elementProps } };
+            return {
+              ...element,
+              settings: { ...element.settings, ...elementProps },
+            };
           }
           return element;
         }),
@@ -89,7 +100,7 @@ const useFormBuilder = () => {
     updateElementProps,
     reorderElements,
     selectedElement,
-    setSelectedElement,
+    setSelectedElementId,
     handlePropsChange,
   };
 };

@@ -11,8 +11,8 @@ export interface ExtensionProps {
 }
 
 export interface Extension {
-  id: string;
+  id: number;
   name: string;
-  accessor: string;
+  extension: string;
   settings?: ExtensionProps;
 }
