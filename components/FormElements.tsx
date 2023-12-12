@@ -1,16 +1,22 @@
 'use client';
 
+import { Extension } from '@/types';
+
 interface FormElement {
   name: string;
-  extension: string;
+  slug: string;
 }
 const FormElements = ({ extensions }: any) => {
+  // const renderField = (ext: Extension) => {
+  //   return extensions.find(
+  //     (extension) => extension.slug === ext.slug && extension,
+  //   );
+  // };
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
     field: FormElement,
   ) => {
-    e.dataTransfer.setData('name', field.extension);
-    e.dataTransfer.setData('extension', field.extension);
+    e.dataTransfer.setData('extension', JSON.stringify(field));
   };
   return (
     <div className=' relative'>
@@ -25,7 +31,7 @@ const FormElements = ({ extensions }: any) => {
             onDragStart={(e) => handleDragStart(e, field)}
             className='p-2 bg-gray-100 rounded-md hover:bg-gray-200 h-20 flex items-center justify-center'
           >
-            {field.extension}
+            {field.slug}
           </div>
         ))}
       </div>

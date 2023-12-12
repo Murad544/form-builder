@@ -1,6 +1,8 @@
-export interface ExtensionProps {
+export interface ExtensionSettings {
   label?: string;
+  type?: string;
   placeholder?: string;
+  helperText?: string;
   value?: string | number | boolean;
   options?: Array<string | number>; // For elements like select or radio
   onChange?: (value: string | number | boolean) => void;
@@ -13,6 +15,8 @@ export interface ExtensionProps {
 export interface Extension {
   id: number;
   name: string;
-  extension: string;
-  settings?: ExtensionProps;
+  slug: string;
+  settings?: ExtensionSettings;
+  renderSettings?: (props: ExtensionSettings) => JSX.Element;
+  render: (props: ExtensionSettings | undefined) => JSX.Element;
 }

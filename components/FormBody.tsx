@@ -1,14 +1,12 @@
 'use client';
 
 import { DragEvent, useRef } from 'react';
-import InputExtension from './Extensions/InputExtension';
 import { Extension } from '@/types';
-import SelectExtension from './Extensions/SelectExtension';
-import RadioGroup from './Extensions/RadioGroup';
+import { extensions } from './FormBuilder';
 
 interface Props {
   elements: Extension[];
-  addElement: (extension: string, initialProps: any) => void;
+  addElement: (slug: Extension) => void;
   removeElement: (id: number) => void;
   reorderElements: (dragItem: number, dragOverItem: number) => void;
   setSelectedElementId: (id: number) => void;
@@ -21,15 +19,18 @@ const FormBody = ({
   reorderElements,
   setSelectedElementId,
 }: Props) => {
+  console.log(elements);
   const dragItem = useRef(0);
   const dragOverItem = useRef(0);
 
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
     const isInForm = e.dataTransfer.getData('isInForm');
-    const extension = e.dataTransfer.getData('extension');
+    const extension =
+      isInForm !== 'true' &&
+      JSON?.parse(e.dataTransfer.getData('extension') ?? '{}');
     if (isInForm !== 'true') {
-      addElement(extension, {});
+      addElement(extension);
     }
   };
 
@@ -49,16 +50,9 @@ const FormBody = ({
   };
 
   const renderField = (ext: Extension) => {
-    switch (ext.extension) {
-      case 'input':
-        return <InputExtension {...ext.settings} />;
-      case 'select':
-        return <SelectExtension {...ext.settings} />;
-      case 'radioGroup':
-        return <RadioGroup {...ext.settings} />;
-      default:
-        return null;
-    }
+    return extensions.find(
+      (extension) => extension.slug === ext.slug && extension,
+    );
   };
   return (
     <div
@@ -86,7 +80,8 @@ const FormBody = ({
             }
           >
             <div className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'>
-              {renderField(field)}
+              {/* rendering your custom component here */}
+              {renderField(field)?.render(field?.settings)}
               <div>{field?.settings?.helperText}</div>
             </div>
             <button

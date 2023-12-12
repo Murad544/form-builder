@@ -1,7 +1,7 @@
-import { ExtensionProps } from '@/types';
+import { ExtensionSettings } from '@/types';
 import React, { FC } from 'react';
 
-const RadioGroup: FC<ExtensionProps> = ({
+const RadioGroup: FC<ExtensionSettings> = ({
   label,
   value,
   options,

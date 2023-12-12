@@ -24,7 +24,7 @@ type Keys = keyof Field;
 const FormSettings = ({ selectedElement, handlePropsChange }: any) => {
   const settings = selectedElement?.settings;
 
-  const hanleOptionChange = (
+  const handleSettingChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     const value = e.target.value;
@@ -39,26 +39,27 @@ const FormSettings = ({ selectedElement, handlePropsChange }: any) => {
   };
 
   const showChoices =
-    selectedElement?.extension === 'radioGroup' ||
-    selectedElement?.extension === 'select';
+    selectedElement?.slug === 'radioGroup' ||
+    selectedElement?.slug === 'select';
   return (
     <div className='col-span-1 overflow-y-auto relative overflow-y-auto'>
       <h2 className='text-xl font-semibold mb-2 fixed w-full bg-white border-b-2 z-30'>
         Options
       </h2>
       <div className='grid gap-3 pt-10'>
+        {}
         <div>
           <label htmlFor=''>Label</label>
           <input
             type='text'
             name='label'
             className='border border-gray-300 w-full mt-2'
-            onChange={hanleOptionChange}
+            onChange={handleSettingChange}
             value={settings?.label ?? ''}
           />
         </div>
 
-        <div>
+        {/* <div>
           <label htmlFor=''>Placeholder</label>
           <input
             type='text'
@@ -98,7 +99,7 @@ const FormSettings = ({ selectedElement, handlePropsChange }: any) => {
             <option value={'hidden'}>hidden</option>
           </select>
         </div>
-        {selectedElement?.extension.includes('Input') && (
+        {selectedElement?.slug.includes('Input') && (
           <div className='grid grid-cols-2 gap-1'>
             <div className='col-span-1'>
               <label htmlFor=''>Min length</label>
@@ -143,9 +144,9 @@ const FormSettings = ({ selectedElement, handlePropsChange }: any) => {
             onChange={hanleRequiredChange}
             checked={settings?.required ?? false}
           />
-        </div>
+        </div> */}
 
-        {showChoices && <Choices />}
+        {/* {showChoices && <Choices />} */}
       </div>
     </div>
   );

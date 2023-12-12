@@ -1,7 +1,7 @@
-import { ExtensionProps } from '@/types';
+import { ExtensionSettings } from '@/types';
 import React, { FC } from 'react';
 
-const SelectExtension: FC<ExtensionProps> = ({
+const SelectExtension: FC<ExtensionSettings> = ({
   label,
   value,
   options,

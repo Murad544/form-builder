@@ -1,16 +1,8 @@
-import { ExtensionProps } from '@/types';
+import { Extension, ExtensionSettings } from '@/types';
 import { useState, useCallback } from 'react';
 
-interface ElementData {
-  id: number;
-  name?: string;
-  type?: string;
-  extension?: string;
-  settings: ExtensionProps;
-}
-
 const useFormBuilder = () => {
-  const [elements, setElements] = useState<ElementData[]>([]);
+  const [elements, setElements] = useState<Extension[]>([]);
   const [selectedElementId, setSelectedElementId] = useState<number | null>(
     null,
   );
@@ -19,19 +11,14 @@ const useFormBuilder = () => {
   );
 
   // Function to add a new element
-  const addElement = useCallback(
-    (extension: string, initialProps: ExtensionProps) => {
-      const newElement: ElementData = {
-        id: Date.now(), // Simple unique id generator
-        extension,
-        name: extension,
-        settings: initialProps,
-      };
-      setSelectedElementId(newElement.id);
-      setElements((prevElements) => [...prevElements, newElement]);
-    },
-    [],
-  );
+  const addElement = useCallback((slug: any) => {
+    const newElement: Extension = {
+      id: Date.now(), // Simple unique id generator
+      ...slug,
+    };
+    setSelectedElementId(newElement.id);
+    setElements((prevElements) => [...prevElements, newElement]);
+  }, []);
 
   // Function to remove an element
   const removeElement = useCallback((id: number) => {
@@ -42,7 +29,7 @@ const useFormBuilder = () => {
 
   // Function to update an element's properties
   const updateElementProps = useCallback(
-    (id: number, newProps: ExtensionProps) => {
+    (id: number, newProps: ExtensionSettings) => {
       setElements((prevElements) =>
         prevElements.map((element) => {
           if (element.id === id) {
