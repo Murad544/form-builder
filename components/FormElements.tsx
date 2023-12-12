@@ -2,19 +2,13 @@
 
 import { Extension } from '@/types';
 
-interface FormElement {
-  name: string;
-  slug: string;
+interface Props {
+  extensions: Extension[];
 }
-const FormElements = ({ extensions }: any) => {
-  // const renderField = (ext: Extension) => {
-  //   return extensions.find(
-  //     (extension) => extension.slug === ext.slug && extension,
-  //   );
-  // };
+const FormElements = ({ extensions }: Props) => {
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
-    field: FormElement,
+    field: Extension,
   ) => {
     e.dataTransfer.setData('extension', JSON.stringify(field));
   };

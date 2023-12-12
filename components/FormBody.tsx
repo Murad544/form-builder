@@ -19,7 +19,6 @@ const FormBody = ({
   reorderElements,
   setSelectedElementId,
 }: Props) => {
-  console.log(elements);
   const dragItem = useRef(0);
   const dragOverItem = useRef(0);
 
@@ -28,7 +27,7 @@ const FormBody = ({
     const isInForm = e.dataTransfer.getData('isInForm');
     const extension =
       isInForm !== 'true' &&
-      JSON?.parse(e.dataTransfer.getData('extension') ?? '{}');
+      JSON?.parse(e.dataTransfer.getData('extension') ?? '');
     if (isInForm !== 'true') {
       addElement(extension);
     }
@@ -51,7 +50,7 @@ const FormBody = ({
 
   const renderField = (ext: Extension) => {
     return extensions.find(
-      (extension) => extension.slug === ext.slug && extension,
+      (extension) => extension.extensionId === ext.extensionId,
     );
   };
   return (
@@ -69,10 +68,10 @@ const FormBody = ({
             key={field.id}
             className={`relative col-span-12`}
             draggable
-            onClick={() => setSelectedElementId(field.id)}
+            onClick={() => setSelectedElementId(field.id as number)}
             onDragStart={(e) => {
               handleDragStart(e, index);
-              setSelectedElementId(field.id);
+              setSelectedElementId(field.id as number);
             }}
             onDragEnter={(e) => handleDragEnter(e, index)}
             onDrop={() =>
@@ -80,12 +79,13 @@ const FormBody = ({
             }
           >
             <div className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'>
+              <label>{field?.settings?.label}</label>
               {/* rendering your custom component here */}
               {renderField(field)?.render(field?.settings)}
               <div>{field?.settings?.helperText}</div>
             </div>
             <button
-              onClick={() => removeElement(field.id)}
+              onClick={() => removeElement(field.id as number)}
               className='absolute top-0 right-0 bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6 z-1'
               type='button'
             >

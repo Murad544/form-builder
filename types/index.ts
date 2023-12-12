@@ -5,7 +5,7 @@ export interface ExtensionSettings {
   helperText?: string;
   value?: string | number | boolean;
   options?: Array<string | number>; // For elements like select or radio
-  onChange?: (value: string | number | boolean) => void;
+  onChange?: (e: any) => void;
   // Add other common properties here
 
   // For extension-specific properties, you can use an index signature
@@ -13,10 +13,11 @@ export interface ExtensionSettings {
 }
 
 export interface Extension {
-  id: number;
+  id?: number;
+  extensionId: number;
   name: string;
   slug: string;
   settings?: ExtensionSettings;
-  renderSettings?: (props: ExtensionSettings) => JSX.Element;
-  render: (props: ExtensionSettings | undefined) => JSX.Element;
+  renderSettings?: (settings: ExtensionSettings, handleChange: (value: any, key: any) => void) => JSX.Element;
+  render?: (settings: ExtensionSettings) => JSX.Element;
 }
