@@ -9,7 +9,7 @@ interface FormBuilderState {
 export interface Field {
   id: string;
   name: string;
-  accessor: string;
+  slug: string;
   label?: string;
   placeholder?: string;
   width?: string;

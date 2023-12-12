@@ -1,150 +1,57 @@
 'use client';
 
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  Field,
-  addFormField,
-  deleteFormField,
-  selectField,
-} from '@/store/slices/formBuilderSlice';
-import { RootState } from '@/store/store';
-import { v4 as uuidv4 } from 'uuid';
-import { DragEvent } from 'react';
+import { DragEvent, useRef } from 'react';
+import { Extension } from '@/types';
+import { extensions } from './FormBuilder';
 
-const FormBody = () => {
-  const dispatch = useDispatch();
-  const { formFields, selectedField } = useSelector(
-    (state: RootState) => state.formBuilder,
-  );
+interface Props {
+  elements: Extension[];
+  addElement: (slug: Extension) => void;
+  removeElement: (id: number) => void;
+  reorderElements: (dragItem: number, dragOverItem: number) => void;
+  setSelectedElementId: (id: number) => void;
+}
+
+const FormBody = ({
+  elements,
+  addElement,
+  removeElement,
+  reorderElements,
+  setSelectedElementId,
+}: Props) => {
+  const dragItem = useRef(0);
+  const dragOverItem = useRef(0);
+
   const handleDrop = (e: DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const name = e.dataTransfer.getData('name');
-    const accessor = e.dataTransfer.getData('accessor');
-    const newField: Field = {
-      id: uuidv4(),
-      name,
-      label: name,
-      accessor,
-      visibility: 'visible',
-      width: 'col-span-12',
-    };
-    dispatch(addFormField(newField));
-  };
-
-  const handleFieldClick = (field: Field) => {
-    dispatch(selectField(field));
-  };
-
-  const handleDeleteField = (index: number) => {
-    dispatch(deleteFormField(index));
-  };
-
-  const renderField = (field: Field) => {
-    switch (field.accessor) {
-      case 'textInput':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='text'
-            {...field}
-          />
-        );
-      case 'textarea':
-        return (
-          <textarea className='border border-gray-300 w-full' {...field} />
-        );
-      case 'numberInput':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='number'
-            {...field}
-          />
-        );
-      case 'dateInput':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='date'
-            {...field}
-          />
-        );
-      case 'timeInput':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='time'
-            {...field}
-          />
-        );
-      case 'select':
-        return (
-          <select className='border border-gray-300 w-full'>
-            {field.choices?.map((choice, index) => (
-              <option key={index} value={choice}>
-                {choice}
-              </option>
-            ))}
-          </select>
-        );
-      case 'checkbox':
-        return (
-          <input
-            className='border border-gray-300'
-            type='checkbox'
-            {...field}
-          />
-        );
-      case 'radioButtons':
-        return (
-          <div className='grid'>
-            {field.choices?.map((choice, index) => (
-              <div key={index}>
-                <label htmlFor=''>{choice}</label>
-                <input
-                  className='border border-gray-300 ml-2'
-                  type='radio'
-                  {...field}
-                />
-              </div>
-            ))}
-          </div>
-        );
-      case 'file':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='file'
-            {...field}
-          />
-        );
-      case 'link':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='url'
-            {...field}
-          />
-        );
-      case 'email':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='email'
-            {...field}
-          />
-        );
-      case 'phone':
-        return (
-          <input
-            className='border border-gray-300 w-full'
-            type='tel'
-            {...field}
-          />
-        );
-      default:
-        return null;
+    const isInForm = e.dataTransfer.getData('isInForm');
+    const extension =
+      isInForm !== 'true' &&
+      JSON?.parse(e.dataTransfer.getData('extension') ?? '');
+    if (isInForm !== 'true') {
+      addElement(extension);
     }
+  };
+
+  const handleDragStart = (
+    e: React.DragEvent<HTMLDivElement>,
+    position: any,
+  ) => {
+    e.dataTransfer.setData('isInForm', 'true');
+    dragItem.current = position;
+  };
+
+  const handleDragEnter = (
+    e: React.DragEvent<HTMLDivElement>,
+    position: any,
+  ) => {
+    dragOverItem.current = position;
+  };
+
+  const renderField = (ext: Extension) => {
+    return extensions.find(
+      (extension) => extension.extensionId === ext.extensionId,
+    );
   };
   return (
     <div
@@ -156,32 +63,36 @@ const FormBody = () => {
         Form
       </h2>
       <form className='grid grid-cols-12 gap-4 p-4 pt-10'>
-        {formFields.map(
-          (field, index) =>
-            field.visibility === 'visible' && (
-              <div
-                key={field.id}
-                className={`relative ${field.width} ${
-                  field.id === selectedField?.id && 'border border-gray-700'
-                }`}
-              >
-                <div
-                  onClick={() => handleFieldClick(field)}
-                  className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'
-                >
-                  <label>{field.label}</label>
-                  {renderField(field)}
-                  <div>{field.helperText}</div>
-                </div>
-                <button
-                  onClick={() => handleDeleteField(index)}
-                  className='absolute top-0 right-0 bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6 z-1'
-                >
-                  x
-                </button>
-              </div>
-            ),
-        )}
+        {elements.map((field, index) => (
+          <div
+            key={field.id}
+            className={`relative col-span-12`}
+            draggable
+            onClick={() => setSelectedElementId(field.id as number)}
+            onDragStart={(e) => {
+              handleDragStart(e, index);
+              setSelectedElementId(field.id as number);
+            }}
+            onDragEnter={(e) => handleDragEnter(e, index)}
+            onDrop={() =>
+              reorderElements(dragItem.current, dragOverItem.current)
+            }
+          >
+            <div className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'>
+              <label>{field?.settings?.label}</label>
+              {/* rendering your custom component here */}
+              {renderField(field)?.render(field?.settings)}
+              <div>{field?.settings?.helperText}</div>
+            </div>
+            <button
+              onClick={() => removeElement(field.id as number)}
+              className='absolute top-0 right-0 bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6 z-1'
+              type='button'
+            >
+              x
+            </button>
+          </div>
+        ))}
       </form>
     </div>
   );
