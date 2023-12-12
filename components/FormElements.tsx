@@ -25,6 +25,7 @@ const FormElements = ({ extensions }: Props) => {
             onDragStart={(e) => handleDragStart(e, field)}
             className='p-2 bg-gray-100 rounded-md hover:bg-gray-200 h-20 flex items-center justify-center'
           >
+            {field.icon}
             {field.slug}
           </div>
         ))}
