@@ -7,6 +7,7 @@ import { FC } from 'react';
 import useFormBuilder from '@/hooks/useFormBuilder';
 import { Extension, ExtensionSettings } from '@/types';
 import {
+  checkboxIcon,
   closeIcon,
   inputIcon,
   plusIcon,
@@ -149,7 +150,25 @@ const RadioGroup = {
     SelectInput.renderSettings(settings, handlePropsChange),
 };
 
-export const extensions: Extension[] = [SelectInput, TextInput, RadioGroup];
+const CheckBox = {
+  extensionId: 3,
+  slug: 'check-box',
+  name: 'Checkbox',
+  settings: {},
+  icon: checkboxIcon,
+  render: (settings: ExtensionSettings) => (
+    <input type='checkbox' placeholder={settings.placeholder} />
+  ),
+  renderSettings: (settings: ExtensionSettings, handlePropsChange: any) =>
+    TextInput.renderSettings(settings, handlePropsChange),
+};
+
+export const extensions: Extension[] = [
+  SelectInput,
+  TextInput,
+  RadioGroup,
+  CheckBox,
+];
 
 const FormBuilder: FC = () => {
   const {
