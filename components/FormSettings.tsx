@@ -1,7 +1,7 @@
 'use client';
 
 import { Extension, ExtensionSettings } from '@/types';
-import React, { ChangeEvent } from 'react';
+import React from 'react';
 import { extensions } from './FormBuilder';
 
 interface Props {

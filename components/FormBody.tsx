@@ -48,9 +48,11 @@ const FormBody = ({
     dragOverItem.current = position;
   };
 
-  const renderField = (ext: Extension) => {
-    return extensions.find(
-      (extension) => extension.extensionId === ext.extensionId,
+  const renderField: (ext: Extension) => Extension = (ext: Extension) => {
+    return (
+      extensions.find(
+        (extension) => extension.extensionId === ext.extensionId,
+      ) ?? ({} as Extension)
     );
   };
   return (
@@ -81,6 +83,7 @@ const FormBody = ({
             <div className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'>
               <label>{field?.settings?.label}</label>
               {/* rendering your custom component here */}
+              {/* @ts-ignore */}
               {renderField(field)?.render(field?.settings)}
               <div>{field?.settings?.helperText}</div>
             </div>

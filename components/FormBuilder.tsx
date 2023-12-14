@@ -75,7 +75,7 @@ const SelectInput = {
               <input
                 type='text'
                 className='border border-gray-300 w-full'
-                value={option}
+                value={option ?? ''}
                 onChange={(e) =>
                   handlePropsChange(
                     settings.options?.map((opt, i) => {
