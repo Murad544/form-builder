@@ -17,6 +17,7 @@ export interface Extension {
   extensionId: number;
   name: string;
   slug: string;
+  icon: JSX.Element;
   settings?: ExtensionSettings;
   renderSettings?: (settings: ExtensionSettings, handleChange: (value: any, key: any) => void) => JSX.Element;
   render?: (settings: ExtensionSettings) => JSX.Element;
