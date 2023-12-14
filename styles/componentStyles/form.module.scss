@@ -1,3 +1,10 @@
+.form_builder_container {
+  display: flex;
+  gap: 2.4rem;
+  max-width: 144rem;
+  height: 100%;
+}
+
 .section {
   display: flex;
   flex-direction: column;
@@ -9,26 +16,27 @@
   height: 100%;
 
   &.elements {
-    max-width: 3.2rem;
-  }
-
-  &.editor {
-    max-width: 59.2rem;
-  }
-
-  &.elements {
-    max-width: 40rem;
+    min-width: 32rem;
   }
 
   h2 {
     color: #101828;
-    font-size: 16px;
+    font-size: 1.6rem;
     font-style: normal;
     font-weight: 500;
-    line-height: 24px;
+    line-height: 2.4rem;
     padding: 1.6rem 2.8rem;
     border-bottom: 1px solid #EAECF0;
     width: 100%;
+  }
+
+  label {
+    font-size: 1.4rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 2rem;
+    color: #344054;
+    margin-bottom: 0.6rem;
   }
 
   .elements_container {
@@ -38,8 +46,12 @@
     gap: 1.6rem;
     width: 100%;
     padding: 0 1.6rem;
+    font-size: 1.6rem;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 2.4rem;
 
-    div {
+    &>div {
       padding: 1.2rem 1.6rem;
       cursor: pointer;
       border-radius: 8px;
@@ -51,4 +63,66 @@
       width: 100%;
     }
   }
+
+  &.editor {
+    min-width: 59.2rem;
+
+    form {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 2.4rem;
+      padding: 0 2.4rem;
+    }
+
+    .form_element {
+      display: flex;
+      gap: .8rem;
+
+      &>div {
+        display: flex;
+        flex-direction: column;
+
+        &:first-child {
+          flex: 1
+        }
+
+        &.selected {
+          border-radius: 8px;
+          border: 1px dashed #D0D5DD;
+          padding: 1.6rem 1.2rem;
+        }
+      }
+    }
+
+    .drag_container {
+      width: 2rem;
+
+      .trash_icon {
+        cursor: pointer;
+      }
+
+      .drag_icon {
+        cursor: grab;
+        display: flex;
+        height: 100%;
+        align-items: center;
+        justify-content: center;
+
+        svg {
+          margin-top: -2rem;
+        }
+      }
+    }
+  }
+
+  &.settings {
+    min-width: 40rem;
+
+    .settings_container {
+      width: 100%;
+      padding: 0 2.8rem;
+    }
+  }
+
 }

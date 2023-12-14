@@ -8,6 +8,8 @@ import useFormBuilder from '@/hooks/useFormBuilder';
 import { Extension, ExtensionSettings } from '@/types';
 import { inputIcon, selectIcon } from '@/assets/icons';
 
+import styles from '@/styles/componentStyles/form.module.scss';
+
 const TextInput = {
   extensionId: 0,
   slug: 'input',
@@ -15,12 +17,7 @@ const TextInput = {
   settings: {},
   icon: inputIcon,
   render: (settings: ExtensionSettings) => (
-    <input
-      type='text'
-      placeholder={settings.placeholder}
-      value={(settings.value as string) ?? ''}
-      onChange={settings.onChange}
-    />
+    <input type='text' placeholder={settings.placeholder} />
   ),
   renderSettings: (settings: ExtensionSettings, handlePropsChange: any) => (
     <>
@@ -29,7 +26,6 @@ const TextInput = {
         <input
           type='text'
           name='label'
-          className='border border-gray-300 w-full mt-2'
           onChange={(e) => handlePropsChange(e.target.value, 'label')}
           value={settings?.label ?? ''}
         />
@@ -131,13 +127,14 @@ const FormBuilder: FC = () => {
     setSelectedElementId,
   } = useFormBuilder();
   return (
-    <div className='grid grid-cols-4 gap-4'>
+    <div className={styles.form_builder_container}>
       <FormElements extensions={extensions} />
       <FormBody
         elements={elements}
         addElement={addElement}
         removeElement={removeElement}
         reorderElements={reorderElements}
+        selectedElement={selectedElement}
         setSelectedElementId={setSelectedElementId}
       />
       <FormSettings

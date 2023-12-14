@@ -3,6 +3,7 @@
 import { Extension, ExtensionSettings } from '@/types';
 import React from 'react';
 import { extensions } from './FormBuilder';
+import styles from '@/styles/componentStyles/form.module.scss';
 
 interface Props {
   selectedElement: Extension | undefined;
@@ -19,11 +20,9 @@ const FormSettings = ({ selectedElement, handlePropsChange }: Props) => {
     (extension) => extension.extensionId === selectedElement?.extensionId,
   );
   return (
-    <div className='col-span-1 overflow-y-auto relative overflow-y-auto'>
-      <h2 className='text-xl font-semibold mb-2 fixed w-full bg-white border-b-2 z-30'>
-        Options
-      </h2>
-      <div className='grid gap-3 pt-10'>
+    <div className={`${styles.section} ${styles.settings}`}>
+      <h2>Settings</h2>
+      <div className={styles.settings_container}>
         {currentSettings?.renderSettings &&
           currentSettings?.renderSettings(
             settings as ExtensionSettings,

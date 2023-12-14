@@ -24,7 +24,7 @@ const FormElements = ({ extensions }: Props) => {
             onDragStart={(e) => handleDragStart(e, field)}
           >
             {field.icon}
-            {field.slug}
+            {field.name}
           </div>
         ))}
       </div>

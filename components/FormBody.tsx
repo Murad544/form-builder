@@ -3,12 +3,15 @@
 import { DragEvent, useRef } from 'react';
 import { Extension } from '@/types';
 import { extensions } from './FormBuilder';
+import styles from '@/styles/componentStyles/form.module.scss';
+import { dragIcon, trashIcon } from '@/assets/icons';
 
 interface Props {
   elements: Extension[];
   addElement: (slug: Extension) => void;
   removeElement: (id: number) => void;
   reorderElements: (dragItem: number, dragOverItem: number) => void;
+  selectedElement: Extension | undefined;
   setSelectedElementId: (id: number) => void;
 }
 
@@ -17,6 +20,7 @@ const FormBody = ({
   addElement,
   removeElement,
   reorderElements,
+  selectedElement,
   setSelectedElementId,
 }: Props) => {
   const dragItem = useRef(0);
@@ -59,16 +63,13 @@ const FormBody = ({
     <div
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
-      className='border border-dashed border-gray-300  min-h-[200px] col-span-2 max-h-[100vh] overflow-y-auto relative'
+      className={`${styles.section} ${styles.editor}`}
     >
-      <h2 className='text-xl font-semibold mb-2 fixed bg-white border-b-2 w-full z-20 pl-4'>
-        Form
-      </h2>
-      <form className='grid grid-cols-12 gap-4 p-4 pt-10'>
+      <h2>Editor</h2>
+      <form>
         {elements.map((field, index) => (
           <div
             key={field.id}
-            className={`relative col-span-12`}
             draggable
             onClick={() => setSelectedElementId(field.id as number)}
             onDragStart={(e) => {
@@ -79,21 +80,30 @@ const FormBody = ({
             onDrop={() =>
               reorderElements(dragItem.current, dragOverItem.current)
             }
+            className={styles.form_element}
           >
-            <div className='cursor-pointer p-2 bg-gray-100 rounded-md hover:bg-gray-200'>
+            <div
+              className={`${
+                selectedElement?.id === field.id && styles.selected
+              }`}
+            >
               <label>{field?.settings?.label}</label>
               {/* rendering your custom component here */}
               {/* @ts-ignore */}
               {renderField(field)?.render(field?.settings)}
               <div>{field?.settings?.helperText}</div>
             </div>
-            <button
-              onClick={() => removeElement(field.id as number)}
-              className='absolute top-0 right-0 bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6 z-1'
-              type='button'
-            >
-              x
-            </button>
+            {selectedElement?.id === field.id && (
+              <div className={styles.drag_container}>
+                <div
+                  onClick={() => removeElement(field.id as number)}
+                  className={styles.trash_icon}
+                >
+                  {trashIcon}
+                </div>
+                <div className={styles.drag_icon}>{dragIcon}</div>
+              </div>
+            )}
           </div>
         ))}
       </form>
