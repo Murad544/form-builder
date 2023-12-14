@@ -6,9 +6,17 @@ import FormSettings from './FormSettings';
 import { FC } from 'react';
 import useFormBuilder from '@/hooks/useFormBuilder';
 import { Extension, ExtensionSettings } from '@/types';
-import { inputIcon, selectIcon } from '@/assets/icons';
+import {
+  closeIcon,
+  inputIcon,
+  plusIcon,
+  radioIcon,
+  selectIcon,
+} from '@/assets/icons';
 
 import styles from '@/styles/componentStyles/form.module.scss';
+
+//You can add your custom extensions here:
 
 const TextInput = {
   extensionId: 0,
@@ -20,7 +28,7 @@ const TextInput = {
     <input type='text' placeholder={settings.placeholder} />
   ),
   renderSettings: (settings: ExtensionSettings, handlePropsChange: any) => (
-    <>
+    <div className={styles.custom_settings}>
       <div>
         <label htmlFor=''>Label</label>
         <input
@@ -30,7 +38,16 @@ const TextInput = {
           value={settings?.label ?? ''}
         />
       </div>
-    </>
+      <div>
+        <label htmlFor=''>Placeholder</label>
+        <input
+          type='text'
+          name='placeholder'
+          onChange={(e) => handlePropsChange(e.target.value, 'placeholder')}
+          value={settings?.placeholder ?? ''}
+        />
+      </div>
+    </div>
   ),
 };
 
@@ -52,69 +69,87 @@ const SelectInput = {
     </select>
   ),
   renderSettings: (settings: ExtensionSettings, handlePropsChange: any) => (
-    <>
+    <div className={styles.custom_settings}>
       <div>
         <label htmlFor=''>Label</label>
         <input
           type='text'
           name='label'
-          className='border border-gray-300 w-full mt-2'
           onChange={(e) => handlePropsChange(e.target.value, 'label')}
           value={settings?.label ?? ''}
         />
       </div>
-      <div>
-        <label>choices</label>
-        <div className='flex flex-col mt-2'>
-          {settings?.options?.map((option, index) => (
-            <div key={index} className='flex items-center'>
-              <input
-                type='text'
-                className='border border-gray-300 w-full'
-                value={option ?? ''}
-                onChange={(e) =>
-                  handlePropsChange(
-                    settings.options?.map((opt, i) => {
-                      if (i === index) {
-                        return e.target.value;
-                      }
-                      return opt;
-                    }),
-                    'options',
-                  )
-                }
-              />
-              <button
-                onClick={() =>
-                  handlePropsChange(
-                    settings.options?.filter((opt, i) => i !== index),
-                    'options',
-                  )
-                }
-                className='bg-red-500 text-white rounded-full hover:bg-red-600 w-6 h-6 ml-2'
-                type='button'
-              >
-                x
-              </button>
-            </div>
-          ))}
-          <button
-            onClick={() =>
-              settings.options &&
-              handlePropsChange([...settings.options, ''], 'options')
-            }
-            className='bg-green-500 text-white rounded-full hover:bg-green-600 w-6 h-6 ml-2'
-            type='button'
-          >
-            +
-          </button>
-        </div>
+      <div className={styles.choices_container}>
+        <label>Choices</label>
+        {settings?.options?.map((option, index) => (
+          <div key={index} className={styles.choice}>
+            <input
+              type='text'
+              value={option ?? ''}
+              onChange={(e) =>
+                handlePropsChange(
+                  settings.options?.map((opt, i) => {
+                    if (i === index) {
+                      return e.target.value;
+                    }
+                    return opt;
+                  }),
+                  'options',
+                )
+              }
+            />
+            <button
+              onClick={() =>
+                handlePropsChange(
+                  settings.options?.filter((opt, i) => i !== index),
+                  'options',
+                )
+              }
+              type='button'
+            >
+              {closeIcon}
+            </button>
+          </div>
+        ))}
+        <button
+          onClick={() =>
+            settings.options &&
+            handlePropsChange([...settings.options, ''], 'options')
+          }
+          type='button'
+          className={styles.add_choice}
+        >
+          {plusIcon}
+        </button>
       </div>
-    </>
+    </div>
   ),
 };
 
-export const extensions: Extension[] = [SelectInput, TextInput];
+const RadioGroup = {
+  extensionId: 2,
+  slug: 'radio-group',
+  name: 'Radio group',
+  settings: {
+    options: ['Option 1', 'Option 2', 'Option 3'],
+    label: 'Experience',
+  },
+  icon: radioIcon,
+  render: (settings: ExtensionSettings) => (
+    <div className={styles.radio_group}>
+      {settings.options?.map((option, index) => (
+        <div key={index}>
+          <input type='radio' name='radio' value={option} />
+          <label htmlFor=''>{option}</label>
+        </div>
+      ))}
+    </div>
+  ),
+  renderSettings: (settings: ExtensionSettings, handlePropsChange: any) =>
+    SelectInput.renderSettings(settings, handlePropsChange),
+};
+
+export const extensions: Extension[] = [SelectInput, TextInput, RadioGroup];
 
 const FormBuilder: FC = () => {
   const {

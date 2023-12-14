@@ -60,3 +60,12 @@ select {
     border: 1px solid #233b82;
   }
 }
+
+button {
+  padding: 0;
+  cursor: pointer;
+  border: none;
+  background-color: unset;
+  appearance: none;
+  -webkit-appearance: none;
+}

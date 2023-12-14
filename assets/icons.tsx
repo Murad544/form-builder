@@ -176,4 +176,49 @@ const dragIcon = (
   </svg>
 );
 
-export { inputIcon, selectIcon, radioIcon, checkboxIcon, trashIcon, dragIcon };
+const closeIcon = (
+  <svg
+    width='20'
+    height='20'
+    viewBox='0 0 20 20'
+    fill='none'
+    xmlns='http://www.w3.org/2000/svg'
+  >
+    <path
+      d='M15 5L5 15M5 5L15 15'
+      stroke='#667085'
+      stroke-width='1.66667'
+      stroke-linecap='round'
+      stroke-linejoin='round'
+    />
+  </svg>
+);
+
+const plusIcon = (
+  <svg
+    width='20'
+    height='20'
+    viewBox='0 0 20 20'
+    fill='none'
+    xmlns='http://www.w3.org/2000/svg'
+  >
+    <path
+      d='M9.99999 4.16666V15.8333M4.16666 10H15.8333'
+      stroke='#667085'
+      stroke-width='1.67'
+      stroke-linecap='round'
+      stroke-linejoin='round'
+    />
+  </svg>
+);
+
+export {
+  inputIcon,
+  selectIcon,
+  radioIcon,
+  checkboxIcon,
+  trashIcon,
+  dragIcon,
+  closeIcon,
+  plusIcon,
+};

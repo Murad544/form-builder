@@ -67,6 +67,32 @@
   &.editor {
     min-width: 59.2rem;
 
+    .radio_group {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+      margin-top: 1.2rem;
+
+      &>div {
+        height: 2.4rem;
+      }
+
+      input {
+        width: 1.6rem;
+        height: 1.6rem;
+      }
+
+      label {
+        margin-bottom: 0;
+      }
+
+      &>div {
+        display: flex;
+        align-items: center;
+        gap: 1.2rem;
+      }
+    }
+
     form {
       width: 100%;
       display: flex;
@@ -122,6 +148,31 @@
     .settings_container {
       width: 100%;
       padding: 0 2.8rem;
+    }
+
+    .custom_settings {
+      display: flex;
+      flex-direction: column;
+      gap: 2.4rem;
+    }
+
+    .add_choice {
+      width: 3.6rem;
+      height: 3.6rem;
+      background-color: #F9FAFB;
+      border-radius: .8rem;
+    }
+
+    .choices_container {
+      display: flex;
+      flex-direction: column;
+      gap: 1.2rem;
+
+      .choice {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+      }
     }
   }
 
