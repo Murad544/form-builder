@@ -157,7 +157,14 @@ const CheckBox = {
   settings: {},
   icon: checkboxIcon,
   render: (settings: ExtensionSettings) => (
-    <input type='checkbox' placeholder={settings.placeholder} />
+    <input
+      type='checkbox'
+      placeholder={settings.placeholder}
+      style={{
+        width: '2rem',
+        height: '2rem',
+      }}
+    />
   ),
   renderSettings: (settings: ExtensionSettings, handlePropsChange: any) =>
     TextInput.renderSettings(settings, handlePropsChange),
