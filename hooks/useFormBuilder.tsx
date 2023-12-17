@@ -16,7 +16,7 @@ const useFormBuilder = () => {
       id: Date.now(), // Simple unique id generator
       ...slug,
     };
-    setSelectedElementId(newElement.id);
+    setSelectedElementId(newElement.id as number);
     setElements((prevElements) => [...prevElements, newElement]);
   }, []);
 
